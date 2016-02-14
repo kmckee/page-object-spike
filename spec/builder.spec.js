@@ -1,20 +1,23 @@
-const on = require('../lib/builder').on;
+const on      = require('../lib/builder').on,
+      reducer = require('../lib/reducer');
 
 describe('builder', function() {
     "use strict";
+    beforeEach(function() {
+        spyOn(reducer, 'reducePromises').andReturn(Promise.resolve(''));
+    });
+
     it('returns an instance of the class', function() {
         const instance  = {},
-            PageClass = function() { return instance; };
-
+              PageClass = function() { return instance; };
         expect(on(PageClass)).toEqual(instance);
     });
+
     it('adds a then function', function() {
         const instance  = {},
-            PageClass = function() { return instance; };
-
+              PageClass = function() { return instance; };
         expect(on(PageClass).then).toBeDefined();
     });
-
 
     describe('SignupPage', function() {
         let SignupPage, usernameTextSpy, submitClickSpy,
@@ -50,17 +53,27 @@ describe('builder', function() {
             expect(submitClickSpy).toHaveBeenCalled();
         });
 
-         it('chains the promises together', function(done) {
-             on(SignupPage)
-                 .username.text('Kyle')
-                 .submit.click()
-                 .then(function() {
-                     // Test times out, this is not getting invoked?
+        it('reduces the promises', function(done) {
+            on(SignupPage)
+                .username.text('Kyle')
+                .submit.click()
+                .then(function() {
                     expect(reducer.reducePromises)
                         .toHaveBeenCalledWith([usernameTextPromise, submitClickPromise]);
                     done();
                 });
-            // Digest equivalent ?
+        });
+
+        it('attaches then handler to the reduced promise', function(done) {
+            let reducedPromiseValue = 'foo';
+            reducer.reducePromises.andReturn(Promise.resolve(reducedPromiseValue));
+            on(SignupPage)
+                .username.text('Kyle')
+                .submit.click()
+                .then(function(val) {
+                    expect(val).toEqual(reducedPromiseValue);
+                    done();
+                });
         });
     });
 });
