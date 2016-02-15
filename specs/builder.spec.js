@@ -4,19 +4,19 @@ const on      = require('../lib/builder').on,
 describe('builder', function() {
     'use strict';
     beforeEach(function() {
-        spyOn(reducer, 'reducePromises').andReturn(Promise.resolve(''));
+        sinon.stub(reducer, 'reducePromises').returns(Promise.resolve(''));
     });
 
     it('returns an instance of the class', function() {
         const instance  = {},
               PageClass = function() { return instance; };
-        expect(on(PageClass)).toEqual(instance);
+        expect(on(PageClass)).to.equal(instance);
     });
 
     it('adds a then function', function() {
         const instance  = {},
               PageClass = function() { return instance; };
-        expect(on(PageClass).then).toBeDefined();
+        expect(on(PageClass).then).to.be.defined;
     });
 
     describe('SignupPage', function() {
@@ -25,8 +25,8 @@ describe('builder', function() {
         beforeEach(function() {
             usernameTextPromise = Promise.resolve();
             submitClickPromise  = Promise.resolve();
-            usernameTextSpy = jasmine.createSpy('username.text').andReturn(usernameTextPromise);
-            submitClickSpy  = jasmine.createSpy('submit.click').andReturn(submitClickPromise);
+            usernameTextSpy = sinon.stub().returns(usernameTextPromise);
+            submitClickSpy  = sinon.stub().returns(submitClickPromise);
             SignupPage      = function() {
                 this.username = { text: usernameTextSpy };
                 this.submit   = { click: submitClickSpy };
@@ -36,21 +36,21 @@ describe('builder', function() {
 
         it('returns an object with the user defined elements', function() {
             const pageBuilder = on(SignupPage);
-            expect(pageBuilder.username.text).toBeDefined();
-            expect(pageBuilder.submit.click).toBeDefined();
+            expect(pageBuilder.username.text).to.be.defined;
+            expect(pageBuilder.submit.click).to.be.defined;
         });
 
         it('invokes single actions', function() {
             on(SignupPage).username.text('Kyle');
-            expect(usernameTextSpy).toHaveBeenCalledWith('Kyle');
+            expect(usernameTextSpy).to.have.been.calledWith('Kyle');
         });
 
         it('allows chaining and calls all promises', function() {
             on(SignupPage)
                 .username.text('Kyle')
                 .submit.click();
-            expect(usernameTextSpy).toHaveBeenCalledWith('Kyle');
-            expect(submitClickSpy).toHaveBeenCalled();
+            expect(usernameTextSpy).to.have.been.calledWith('Kyle');
+            expect(submitClickSpy).to.have.been.calledWith();
         });
 
         it('reduces the promises', function(done) {
@@ -59,19 +59,19 @@ describe('builder', function() {
                 .submit.click()
                 .then(function() {
                     expect(reducer.reducePromises)
-                        .toHaveBeenCalledWith([usernameTextPromise, submitClickPromise]);
+                        .to.have.been.calledWith([usernameTextPromise, submitClickPromise]);
                     done();
                 });
         });
 
         it('attaches then handler to the reduced promise', function(done) {
             let reducedPromiseValue = 'foo';
-            reducer.reducePromises.andReturn(Promise.resolve(reducedPromiseValue));
+            reducer.reducePromises.returns(Promise.resolve(reducedPromiseValue));
             on(SignupPage)
                 .username.text('Kyle')
                 .submit.click()
                 .then(function(val) {
-                    expect(val).toEqual(reducedPromiseValue);
+                    expect(val).to.equal(reducedPromiseValue);
                     done();
                 });
         });

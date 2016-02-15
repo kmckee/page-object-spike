@@ -6,7 +6,7 @@ describe('reducer', () => {
         let promises = [() => { return Promise.resolve('foo'); }];
         let result = reduce(promises);
         result.then((value) => {
-            expect(value).toEqual('foo');
+            expect(value).to.equal('foo');
             done();
         });
     });
@@ -17,20 +17,20 @@ describe('reducer', () => {
         ];
         let result = reduce(promises);
         result.then((value) => {
-            expect(value).toEqual('bar');
+            expect(value).to.equal('bar');
             done();
         });
     });
     it('invokes all promise factories', (done) => {
         let promises = [
-            jasmine.createSpy('first').andReturn(Promise.resolve('foo')),
-            jasmine.createSpy('second').andReturn(Promise.resolve('bar'))
+            sinon.stub().returns(Promise.resolve('foo')),
+            sinon.stub().returns(Promise.resolve('bar'))
         ];
         let result = reduce(promises);
         result.then((value) => {
-            expect(value).toEqual('bar');
-            expect(promises[0]).toHaveBeenCalled();
-            expect(promises[1]).toHaveBeenCalled();
+            expect(value).to.equal('bar');
+            expect(promises[0]).to.have.been.called;
+            expect(promises[1]).to.have.been.called;
             done();
         });
 
