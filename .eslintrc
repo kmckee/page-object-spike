@@ -17,7 +17,8 @@
         "mocha": true
     },
     "globals": {
-        "sinon": true
+        "sinon": true,
+        "expect": true
     },
     "extends": "eslint:recommended"
 }
