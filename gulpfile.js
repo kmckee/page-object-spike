@@ -1,11 +1,11 @@
-/*eslint-disable no-alert, no-console */
+/*eslint-disable no-console */
 
-var gulp        = require('gulp'),
-    path        = require('path'),
-    chalk       = require('chalk'),
-    fs          = require('node-fs-extra'),
-    mocha       = require('gulp-mocha');
-
+var gulp     = require('gulp'),
+    path     = require('path'),
+    chalk    = require('chalk'),
+    fs       = require('node-fs-extra'),
+    mocha    = require('gulp-mocha'),
+    q        = require('q');
 
 ////////////////////////////////////////////////////////////////////////////////
 // default
@@ -54,10 +54,10 @@ gulp.task(
         'use strict';
 
         var del = require('del'),
-            dirsToDelete = [
-                'dist',
-                'node_modules'
-            ];
+        dirsToDelete = [
+            'dist',
+            'node_modules'
+        ];
 
         del(dirsToDelete, cb);
     }
@@ -72,12 +72,12 @@ gulp.task(
         'use strict';
 
         var eslint = require('gulp-eslint'),
-            jsSources = getJavaScriptSourceGlobs({includeSpecs: true});
+        jsSources = getJavaScriptSourceGlobs({includeSpecs: true});
 
         return gulp.src(jsSources)
-            .pipe(eslint())
-            .pipe(eslint.format())
-            .pipe(eslint.failAfterError());
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
     }
 );
 
@@ -92,12 +92,31 @@ gulp.task(
         'use strict';
 
         var outputDir = path.join(__dirname, 'dist'),
-            sources = getJavaScriptSourceGlobs({includeSpecs: false});
+        sources = getJavaScriptSourceGlobs({includeSpecs: false});
 
         fs.removeSync(outputDir);
 
         return gulp.src(sources)
-                   .pipe(gulp.dest(outputDir));
+        .pipe(gulp.dest(outputDir));
+    }
+);
+
+gulp.task(
+    'cukeRelease',
+    ['buildRelease'],
+    function () {
+        'use strict';
+
+        //
+        // Copy dist folders into testProject as if they were installed
+        // using npm.
+        //
+        fs.removeSync('testProject/node_modules/page-object-js');
+        fs.copySync('dist', 'testProject/node_modules/page-object-js/dist');
+        fs.copySync('package.json',
+        'testProject/node_modules/page-object-js/package.json');
+        fs.copySync('index.js',
+        'testProject/node_modules/page-object-js/index.js');
     }
 );
 
@@ -111,42 +130,39 @@ gulp.task(
     function () {
         'use strict';
         return gulp.src('lib/**/*.spec.js')
-                   .pipe(mocha({reporter: 'nyan'}));
+        .pipe(mocha({reporter: 'nyan'}));
     }
 );
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // cukes
 ////////////////////////////////////////////////////////////////////////////////
-// gulp.task(
-//     'cukes',
-//     ['build'],
-//     function () {
-//         'use strict';
-//
-//         //
-//         // Copy dist folders into testProject as if they were installed
-//         // using npm.
-//         //
-//         fs.removeSync('testProject/node_modules/page-object-js');
-//         fs.copySync('dist', 'testProject/node_modules/page-object-js/dist');
-//         fs.copySync('package.json',
-//             'testProject/node_modules/page-object-js/package.json');
-//
-//         //
-//         // Invoke testProject's cuke task.
-//         //
-//         return exec(
-//             'gulp cukes',
-//             {cwd: path.join(__dirname, 'testProject')}
-//         );
-//
-//
-//
-//     }
-// );
-//
+gulp.task(
+    'cukes',
+    ['cukeRelease'],
+    function () {
+        'use strict';
+        return exec(
+            'gulp cukes:focus',
+            {cwd: path.join(__dirname, 'testProject')}
+        );
+    }
+);
+
+gulp.task(
+    'cukes:focus',
+    ['cukeRelease'],
+    function () {
+        'use strict';
+        return exec(
+            'gulp cukes:focus',
+            {cwd: path.join(__dirname, 'testProject')}
+        );
+    }
+);
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
@@ -167,23 +183,20 @@ function getJavaScriptSourceGlobs(config) {
 // Just like Node's child_process.exec(), but returns a promise.  The promise is is
 // fulfilled (with stdout) when the process exits successfully.  The promise is reject
 // with an Error object otherwise.
-// function exec(command, options) {
-//     'use strict';
-//
-//     var nodeExec = require('child_process').exec,
-//         dfd = q.defer();
-//
-//     nodeExec(command, options, function (err, stdout, stderr) {
-//         if (err) {
-//             console.log(stderr);
-//             dfd.reject(err);
-//             return;
-//         }
-//
-//         console.log(stdout);
-//         dfd.resolve(stdout);
-//     });
-//
-//     return dfd.promise;
-//
-// }
+function exec(command, options) {
+    'use strict';
+
+    var nodeExec = require('child_process').exec,
+    dfd = q.defer();
+    nodeExec(command, options, function (err, stdout, stderr) {
+        if (err) {
+            console.log(stderr);
+            dfd.reject(err);
+            return;
+        }
+
+        console.log(stdout);
+        dfd.resolve(stdout);
+    });
+    return dfd.promise;
+}

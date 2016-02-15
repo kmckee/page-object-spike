@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page A</title>
+    <script>
+        function onSubmit() {
+            var element         = document.getElementById('submit-count'),
+                existingContent = element.innerHTML;
+            element.innerHTML = parseInt(existingContent) + 1;
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <label>
+            First name:
+            <input type="text" />
+        </label>
+        <br/>
+        <label>
+            Last name:
+            <input type="text" />
+        </label>
+        <br/>
+        <label>E-mail:
+            <input type="email" />
+        </label>
+        <br/>
+
+        <input id="sign-up" type="button" value="Submit" onclick="onSubmit()"/>
+    </form>
+        <input type="button" id="delete-database" disabled />
+    <div>
+        Clicked: <span id="submit-count">0</span>
+    </div>
+</body>
+</html>
