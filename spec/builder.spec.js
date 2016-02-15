@@ -2,7 +2,7 @@ const on      = require('../lib/builder').on,
       reducer = require('../lib/reducer');
 
 describe('builder', function() {
-    "use strict";
+    'use strict';
     beforeEach(function() {
         spyOn(reducer, 'reducePromises').andReturn(Promise.resolve(''));
     });
