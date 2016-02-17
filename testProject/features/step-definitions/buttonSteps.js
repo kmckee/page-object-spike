@@ -1,11 +1,11 @@
 var expect         = require('chai').expect,
-    SignupFormPage = require('../pages/SimpleFormPage'),
+    SignupFormPage = require('../pages/ButtonTestPage'),
     po             = require('page-object-js'),
     visit          = po.visit,
     on             = po.on;
 
 module.exports = function () {
-    this.When(/^I am viewing the Simple Form page$/, function () {
+    this.When(/^I am viewing the Button Test page$/, function () {
         return visit(SignupFormPage);
     });
     this.Then(/^a SignUp button should exist$/, function () {
