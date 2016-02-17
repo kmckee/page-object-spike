@@ -1,51 +1,53 @@
 {
-    "name": "page-object-spike",
-    "version": "0.0.1",
-    "main": "index.js",
-    "scripts": {
-        "test": "gulp ut",
-        "postinstall": "npm --prefix ./testProject install ./testProject",
-        "setup": "npm install -g gulp-cli cucumber && npm install"
+  "name": "page-object-spike",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp ut",
+    "postinstall": "npm --prefix ./testProject install ./testProject",
+    "setup": "npm install -g gulp-cli cucumber && npm install"
+  },
+  "contributors": [
+    {
+      "name": "Kyle McKee",
+      "email": "mckee.kyle@gmail.com",
+      "url": ""
     },
-    "contributors": [
-        {
-            "name": "Kyle McKee",
-            "email": "mckee.kyle@gmail.com",
-            "url": ""
-        },
-        {
-            "name": "Yash Kulshrestha",
-            "email": "yash.kulshrestha@gmail.com",
-            "url": ""
-        },
-        {
-            "name": "Kevin Peters",
-            "email": "kwpeters@gmail.com",
-            "url": ""
-        }
-    ],
-    "license": "MIT",
-    "dependencies": {
-        "lodash": "^4.3.0"
+    {
+      "name": "Yash Kulshrestha",
+      "email": "yash.kulshrestha@gmail.com",
+      "url": ""
     },
-    "devDependencies": {
-        "chai": "^3.5.0",
-        "gulp": "^3.9.1",
-        "gulp-eslint": "^2.0.0",
-        "gulp-mocha": "^2.2.0",
-        "gulp-sourcemaps": "^1.6.0",
-        "node-fs-extra": "^0.8.1",
-        "q": "^1.4.1",
-        "sinon": "^1.17.3",
-        "sinon-chai": "^2.8.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/kmckee/page-object-spike.git"
-    },
-    "bugs": {
-        "url": "https://github.com/kmckee/page-object-spike/issues"
-    },
-    "homepage": "https://github.com/kmckee/page-object-spike#readme",
-    "description": ""
+    {
+      "name": "Kevin Peters",
+      "email": "kwpeters@gmail.com",
+      "url": ""
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.3.0",
+    "selenium-webdriver": "^2.52.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "node-fs-extra": "^0.8.1",
+    "q": "^1.4.1",
+    "selenium-webdriver": "^2.52.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmckee/page-object-spike.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kmckee/page-object-spike/issues"
+  },
+  "homepage": "https://github.com/kmckee/page-object-spike#readme",
+  "description": ""
 }
