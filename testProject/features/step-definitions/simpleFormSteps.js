@@ -1,21 +1,19 @@
-var chai   = require('chai'),
-    expect = chai.expect,
-    SignupFormPage = require('../pages/SignupFormPage'),
-    on = require('page-object-js').on;
+var expect         = require('chai').expect,
+    SignupFormPage = require('../pages/SimpleFormPage'),
+    on             = require('page-object-js').on;
 
 module.exports = function () {
-    this.When(/^I am viewing the sample login page$/, function (done) {
-        this.browser.get('http://localhost:3000/signup_form.html');
+    this.When(/^I am viewing the Simple Form page$/, function (done) {
+        this.browser.get('http://localhost:3000/simple_form.html');
         setTimeout(done, 2000);
         // This should not be so complicated.  Want to get to this:
         // visit(SignupFormPage);  Or maybe we can just always use 'on' and let it decide whether to do a get?
     });
-    this.Then(/^a SignUp button should exist$/, function (done) {
+    this.Then(/^a SignUp button should exist$/, function () {
         on(SignupFormPage)
             .signUp.visible()
             .then(function(val) {
                 expect(val).to.equal(true);
-                done();
             });
     });
     this.Then(/^a Foo button should not exist$/, function (done) {
