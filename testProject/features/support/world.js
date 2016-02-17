@@ -1,11 +1,11 @@
 var wd = require('selenium-webdriver'),
-    setBrowser = require('page-object-js').setBrowser;
+    setInstance = require('page-object-js').setInstance;
 
 var driver = new wd.Builder()
                      .forBrowser('chrome')
                      .build();
 
-setBrowser(driver);
+setInstance(driver);
 
 module.exports = function() {
     this.World.prototype.browser = driver;

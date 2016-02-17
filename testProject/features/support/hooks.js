@@ -1,8 +1,8 @@
 
-var getBrowser = require('page-object-js').getBrowser;
+var getInstance = require('page-object-js').getInstance;
 module.exports = function() {
     this.AfterFeatures(function(scenario, done) {
-        getBrowser().quit();
+        getInstance().quit();
         done();
     });
 };
