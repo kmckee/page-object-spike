@@ -143,7 +143,7 @@ gulp.task(
     function () {
         'use strict';
         return exec(
-            'gulp cukes:focus',
+            'gulp cukes',
             {cwd: path.join(__dirname, 'testProject')}
         );
     }
