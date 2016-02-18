@@ -8,6 +8,12 @@ module.exports = function () {
     this.When(/^I am viewing the Button Test page$/, function () {
         return visit(SignupFormPage);
     });
+    this.When(/^I click the SignUp button$/, function (done) {
+        on(SignupFormPage)
+            .signUp.click()
+            .then(done);
+    });
+
     this.Then(/^a SignUp button should exist$/, function () {
         on(SignupFormPage)
             .signUp.visible()

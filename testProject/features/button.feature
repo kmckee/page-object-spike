@@ -11,3 +11,15 @@ Feature: Button
         When I am viewing the Button Test page
         Then the SignUp button should be enabled
         But a DeleteDatabase button should be disabled
+
+    @focus
+    Scenario: Click
+        Given I am viewing the Button Test page
+        When I click the SignUp button
+        Then I should see a submit count of 1
+
+    Scenario: Clicking Twice
+        Given I am viewing the Button Test page
+        When I click the SignUp button
+        And I click the SignUp button
+        Then I should see a submit count of 2
